@@ -10,8 +10,22 @@ var express               = require('express'),
 
 mongoose.connect("mongodb://localhost/auth_demo_app");
 
-app.set('view engine', 'ejs');
+app.use(require("express-session")({
+    secret: "Nickelodeon was better that CN",
+    resave: false,
+    saveUninitialized: false
+}));
 
+app.set('view engine', 'ejs');
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+// =============
+// ROUTES
+// =============
 // home route
 app.get('/', function(req, res){
     res.render("home");
