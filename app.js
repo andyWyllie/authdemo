@@ -36,6 +36,16 @@ app.get('/secret', function(req, res){
     res.render("secret");
 });
 
+// AUTH ROUTES
+// show sign up form
+app.get("/register", function(req, res){
+    res.render("register");
+});
+// handling user sign up
+app.post("/register", function(req, res){
+    res.send("REGISTER");
+});
+
 // setting up the server
 app.listen(process.env.PORT, process.env.IP, function(){
     console.log('server started......')
