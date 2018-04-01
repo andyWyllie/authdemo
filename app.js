@@ -56,6 +56,21 @@ app.post("/register", function(req, res){
         });
     });
 });
+// login form
+app.get('/login', function(req, res) {
+   res.render("login"); 
+});
+// handling login post route
+app.post("/login", passport.authenticate("local",{
+    successRedirect: "/secret",
+    failureRedirect: "/login"
+    }), function(req, res){
+    
+});
+
+
+
+
 
 // setting up the server
 app.listen(process.env.PORT, process.env.IP, function(){
