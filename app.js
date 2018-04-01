@@ -21,6 +21,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(passport.initialize());
 app.use(passport.session());
 
+passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
@@ -33,7 +34,7 @@ app.get('/', function(req, res){
 });
 
 // secret route
-app.get('/secret', function(req, res){
+app.get('/secret', isLoggedIn,function(req, res){
     res.render("secret");
 });
 
@@ -68,8 +69,19 @@ app.post("/login", passport.authenticate("local",{
     
 });
 
+// logout route
+app.get("/logout", function(req, res){
+    req.logout();
+    res.redirect("/");
+});
 
-
+// loggedIn middleware function
+function isLoggedIn(req, res, next){
+    if(req.isAuthenticated()){
+        return next();
+    }
+    res.redirect("/login");
+}
 
 
 // setting up the server
