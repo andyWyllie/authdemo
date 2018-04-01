@@ -17,6 +17,7 @@ app.use(require("express-session")({
 }));
 
 app.set('view engine', 'ejs');
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -43,7 +44,17 @@ app.get("/register", function(req, res){
 });
 // handling user sign up
 app.post("/register", function(req, res){
-    res.send("REGISTER");
+    // pw is a 2nd argument so its not in a database with username
+    User.register(new User({username: req.body.username}), req.body.password, function(err, user){
+        if(err){
+            console.log(err);
+            return res.render('register');
+        }
+        // choosing strategy for passport
+        passport.authenticate("local")(req, res, function(){
+            res.redirect("/secret");
+        });
+    });
 });
 
 // setting up the server
